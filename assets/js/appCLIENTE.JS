@@ -14,24 +14,20 @@ const cerrarSesion=()=>{
 }
 
 
-const agregarContacto= async()=>{
+const agregarCliente= async()=>{
     var nombre=document.querySelector("#nombre").value;
-    var ap=document.querySelector("#ap").value;
-    var am=document.querySelector("#am").value;
+    var municipio=document.querySelector("#municipio").value;
     var telefono=document.querySelector("#telefono").value;
-    var correo=document.querySelector("#correo").value;
     
 
     if(nombre.trim()==='' ||
-    ap.trim()==='' ||
-    am.trim()==='' ||
-    telefono.trim()==='' ||
-    correo.trim()==='' ){
+    municipio.trim()==='' ||
+    telefono.trim()===''){
         Swal.fire({
             icon: 'error',
             title: 'ERROR',
             text: 'FALTA LLENAR CAMPOS',
-            footer: 'CRUD CONTACTOS'
+            footer: 'CRUD CLIENTE'
           })  
         return;       
     }
@@ -40,13 +36,11 @@ const agregarContacto= async()=>{
     // INSERTAR A LA BASE DE DATOS
     const datos=new FormData();
     datos.append("nombre",nombre);
-    datos.append("ap",ap);
-    datos.append("am",am);
+    datos.append("municipio",municipio);
     datos.append("telefono",telefono);
-    datos.append("correo",correo);
     
 
-    var respuesta=await fetch(urlServer+"php/contacto/agregarContacto.php",{
+    var respuesta=await fetch(urlServer+"php/cliente/agregarCliente.php",{
         method:'POST',
         body:datos
     });
@@ -58,7 +52,7 @@ const agregarContacto= async()=>{
             icon: 'success',
             title: 'EXITO!',
             text: resultado.mensaje,
-            footer: 'CRUD CONTACTOS'
+            footer: 'CRUD CLIENTE'
           }) 
           document.querySelector("#formAgregar").reset();
          
@@ -67,16 +61,16 @@ const agregarContacto= async()=>{
             icon: 'error',
             title: 'ERROR',
             text: resultado.mensaje,
-            footer: 'CRUD CONTACTOS'
+            footer: 'CRUD CLIENTE'
           }) 
     }
     document.querySelector("#agregarModal").click();
-    cargarContactos();
+    cargarClientes();
 }
 
-const cargarContactos=async()=>{
+const cargarClientes=async()=>{
 
-    var respuesta=await fetch(urlServer+"php/contacto/cargarContactos.php",{});
+    var respuesta=await fetch(urlServer+"php/cliente/cargarClientes.php",{});
     var registrosHTML=``;
     var resultado=await respuesta.json();
 
@@ -88,10 +82,8 @@ const cargarContactos=async()=>{
         <td>${fila[1]}</td>
         <td>${fila[2]}</td>
         <td>${fila[3]}</td>
-        <td>${fila[4]}</td>
-        <td>${fila[5]}</td>
-        <td><button class="btn btn-success "  data-bs-toggle="modal" data-bs-target="#editarModal" onclick="cargarContacto(${fila[0]})"><i class="bi bi-pencil-square p-1"></i>Editar</button></td>
-        <td><button class="btn btn-danger" onclick="eliminarContacto(${fila[0]})"> <i class="bi bi-trash p-1"></i>Eliminar</button></td>
+        <td><button class="btn btn-success "  data-bs-toggle="modal" data-bs-target="#editarModal" onclick="cargarCliente(${fila[0]})"><i class="bi bi-pencil-square p-1"></i>Editar</button></td>
+        <td><button class="btn btn-danger" onclick="eliminarCliente(${fila[0]})"> <i class="bi bi-trash p-1"></i>Eliminar</button></td>
       </tr>
         `;
     });
@@ -99,9 +91,9 @@ const cargarContactos=async()=>{
 
 }
 
-const eliminarContacto=(contactoid)=>{
+const eliminarCliente=(clienteid)=>{
     Swal.fire({
-        title: '¿Estás seguro de eliminar este Contacto?',
+        title: '¿Estás seguro de eliminar este Cliente?',
         showDenyButton: true,
         confirmButtonText: 'SI',
         confirmButtonColor: '#198754',
@@ -110,9 +102,9 @@ const eliminarContacto=(contactoid)=>{
         if (result.isConfirmed) {
 
             const datos=new FormData();
-                datos.append("contactoid",contactoid);
+                datos.append("id_cliente",clienteid);
 
-            var respuesta=await fetch(urlServer+"php/contacto/eliminarContacto.php",{
+            var respuesta=await fetch(urlServer+"php/cliente/eliminarCliente.php",{
                 method:'POST',
                 body:datos
             });
@@ -124,7 +116,7 @@ const eliminarContacto=(contactoid)=>{
                     icon: 'success',
                     title: 'EXITO!',
                     text: resultado.mensaje,
-                    footer: 'CRUD CONTACTOS'
+                    footer: 'CRUD CLIENTE'
                   }) 
                  
             }else{
@@ -132,47 +124,42 @@ const eliminarContacto=(contactoid)=>{
                     icon: 'error',
                     title: 'ERROR',
                     text: resultado.mensaje,
-                    footer: 'CRUD CONTACTOS'
+                    footer: 'CRUD CLIENTE'
                   }) 
             }
-            cargarContactos();         
+            cargarClientes();         
         } 
       })
 }
 
-const cargarContacto=async(contactoid)=>{
+const cargarCliente=async(id_cliente)=>{
     const datos=new FormData();
-    datos.append("contactoid",contactoid);
+    datos.append("id_cliente",id_cliente);
     
-    var respuesta=await fetch(urlServer+"php/contacto/cargarContacto.php",{
+    var respuesta=await fetch(urlServer+"php/cliente/cargarCliente.php",{
         method:'POST',
         body:datos
     });
     
     var resultado=await respuesta.json();
 
-    document.querySelector("#contactoid").value=resultado.contactoid;
+    document.querySelector("#id_cliente").value=resultado.id_cliente;
     document.querySelector("#enombre").value=resultado.nombre;
-    document.querySelector("#eap").value=resultado.ap;
-    document.querySelector("#eam").value=resultado.am;
+    document.querySelector("#emunicipio").value=resultado.municipio;
     document.querySelector("#etelefono").value=resultado.telefono;
-    document.querySelector("#ecorreo").value=resultado.correo;
+
 
 }
 
-const editarContacto=async()=>{
-    var contactoid=document.querySelector("#contactoid").value;
+const editarCliente=async()=>{
+    var cliente=document.querySelector("#id_cliente").value;
     var nombre=document.querySelector("#enombre").value;
-    var ap=document.querySelector("#eap").value;
-    var am=document.querySelector("#eam").value;
+    var municipio=document.querySelector("#emunicipio").value;
     var telefono=document.querySelector("#etelefono").value;
-    var correo=document.querySelector("#ecorreo").value;
 
     if(nombre.trim()==='' ||
-    ap.trim()==='' ||
-    am.trim()==='' ||
-    telefono.trim()==='' ||
-    correo.trim()==='' ){
+    municipio.trim()==='' ||
+    telefono.trim()==='' ){
         Swal.fire({
             icon: 'error',
             title: 'ERROR',
@@ -184,15 +171,13 @@ const editarContacto=async()=>{
 
      // MODIFICAR EN LA BASE DE DATOS
      const datos=new FormData();
-     datos.append("contactoid",contactoid);
+     datos.append("id_cliente",cliente);
      datos.append("nombre",nombre);
-     datos.append("ap",ap);
-     datos.append("am",am);
+     datos.append("municipio",municipio);
      datos.append("telefono",telefono);
-     datos.append("correo",correo);
      
  
-     var respuesta=await fetch(urlServer+"php/contacto/editarContacto.php",{
+     var respuesta=await fetch(urlServer+"php/cliente/editarCliente.php",{
          method:'POST',
          body:datos
      });
@@ -204,7 +189,7 @@ const editarContacto=async()=>{
              icon: 'success',
              title: 'EXITO!',
              text: resultado.mensaje,
-             footer: 'CRUD CONTACTOS'
+             footer: 'CRUD CLIENTE'
            }) 
            document.querySelector("#formEditar").reset();
           
@@ -213,9 +198,9 @@ const editarContacto=async()=>{
              icon: 'error',
              title: 'ERROR',
              text: resultado.mensaje,
-             footer: 'CRUD CONTACTOS'
+             footer: 'CRUD CLIENTE'
            }) 
      }     
-     cargarContactos();
+     cargarClientes();
 
 }

@@ -1,4 +1,4 @@
-var urlServer="https://cecytem2022.000webhostapp.com/";
+var urlServer="";
 var sesion=localStorage.getItem("nombre");
 
 const checarSesion=()=>{

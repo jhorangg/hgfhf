@@ -14,24 +14,24 @@ const cerrarSesion=()=>{
 }
 
 
-const agregarContacto= async()=>{
-    var nombre=document.querySelector("#nombre").value;
-    var ap=document.querySelector("#ap").value;
-    var am=document.querySelector("#am").value;
-    var telefono=document.querySelector("#telefono").value;
-    var correo=document.querySelector("#correo").value;
+const agregarAuto= async()=>{
+    var marca=document.querySelector("#marca").value;
+    var modelo=document.querySelector("#modelo").value;
+    var año=document.querySelector("#año").value;
+    var color=document.querySelector("#color").value;
+    var costo=document.querySelector("#costo").value;
     
 
-    if(nombre.trim()==='' ||
-    ap.trim()==='' ||
-    am.trim()==='' ||
-    telefono.trim()==='' ||
-    correo.trim()==='' ){
+    if(marca.trim()==='' ||
+    modelo.trim()==='' ||
+    año.trim()==='' ||
+    color.trim()==='' ||
+    costo.trim()===''){
         Swal.fire({
             icon: 'error',
             title: 'ERROR',
             text: 'FALTA LLENAR CAMPOS',
-            footer: 'CRUD CONTACTOS'
+            footer: 'CRUD CLIENTE'
           })  
         return;       
     }
@@ -39,14 +39,14 @@ const agregarContacto= async()=>{
 
     // INSERTAR A LA BASE DE DATOS
     const datos=new FormData();
-    datos.append("nombre",nombre);
-    datos.append("ap",ap);
-    datos.append("am",am);
-    datos.append("telefono",telefono);
-    datos.append("correo",correo);
+    datos.append("marca",marca);
+    datos.append("modelo",modelo);
+    datos.append("año",año);
+    datos.append("color",color);
+    datos.append("costo",costo);
     
 
-    var respuesta=await fetch(urlServer+"php/contacto/agregarContacto.php",{
+    var respuesta=await fetch(urlServer+"php/auto/agregarAuto.php",{
         method:'POST',
         body:datos
     });
@@ -58,7 +58,7 @@ const agregarContacto= async()=>{
             icon: 'success',
             title: 'EXITO!',
             text: resultado.mensaje,
-            footer: 'CRUD CONTACTOS'
+            footer: 'CRUD AUTO'
           }) 
           document.querySelector("#formAgregar").reset();
          
@@ -67,16 +67,16 @@ const agregarContacto= async()=>{
             icon: 'error',
             title: 'ERROR',
             text: resultado.mensaje,
-            footer: 'CRUD CONTACTOS'
+            footer: 'CRUD AUTO'
           }) 
     }
     document.querySelector("#agregarModal").click();
-    cargarContactos();
+    cargarAutos();
 }
 
-const cargarContactos=async()=>{
+const cargarAutos=async()=>{
 
-    var respuesta=await fetch(urlServer+"php/contacto/cargarContactos.php",{});
+    var respuesta=await fetch(urlServer+"php/auto/cargarAutos.php",{});
     var registrosHTML=``;
     var resultado=await respuesta.json();
 
@@ -90,8 +90,8 @@ const cargarContactos=async()=>{
         <td>${fila[3]}</td>
         <td>${fila[4]}</td>
         <td>${fila[5]}</td>
-        <td><button class="btn btn-success "  data-bs-toggle="modal" data-bs-target="#editarModal" onclick="cargarContacto(${fila[0]})"><i class="bi bi-pencil-square p-1"></i>Editar</button></td>
-        <td><button class="btn btn-danger" onclick="eliminarContacto(${fila[0]})"> <i class="bi bi-trash p-1"></i>Eliminar</button></td>
+        <td><button class="btn btn-success "  data-bs-toggle="modal" data-bs-target="#editarModal" onclick="cargarAuto(${fila[0]})"><i class="bi bi-pencil-square p-1"></i>Editar</button></td>
+        <td><button class="btn btn-danger" onclick="eliminarAuto(${fila[0]})"> <i class="bi bi-trash p-1"></i>Eliminar</button></td>
       </tr>
         `;
     });
@@ -99,9 +99,9 @@ const cargarContactos=async()=>{
 
 }
 
-const eliminarContacto=(contactoid)=>{
+const eliminarAuto=(autoid)=>{
     Swal.fire({
-        title: '¿Estás seguro de eliminar este Contacto?',
+        title: '¿Estás seguro de eliminar este Cliente?',
         showDenyButton: true,
         confirmButtonText: 'SI',
         confirmButtonColor: '#198754',
@@ -110,9 +110,9 @@ const eliminarContacto=(contactoid)=>{
         if (result.isConfirmed) {
 
             const datos=new FormData();
-                datos.append("contactoid",contactoid);
+                datos.append("id_auto",autoid);
 
-            var respuesta=await fetch(urlServer+"php/contacto/eliminarContacto.php",{
+            var respuesta=await fetch(urlServer+"php/auto/eliminarAuto.php",{
                 method:'POST',
                 body:datos
             });
@@ -124,7 +124,7 @@ const eliminarContacto=(contactoid)=>{
                     icon: 'success',
                     title: 'EXITO!',
                     text: resultado.mensaje,
-                    footer: 'CRUD CONTACTOS'
+                    footer: 'CRUD AUTO'
                   }) 
                  
             }else{
@@ -132,47 +132,48 @@ const eliminarContacto=(contactoid)=>{
                     icon: 'error',
                     title: 'ERROR',
                     text: resultado.mensaje,
-                    footer: 'CRUD CONTACTOS'
+                    footer: 'CRUD AUTO'
                   }) 
             }
-            cargarContactos();         
+            cargarAutos();         
         } 
       })
 }
 
-const cargarContacto=async(contactoid)=>{
+const cargarAuto=async(id_auto)=>{
     const datos=new FormData();
-    datos.append("contactoid",contactoid);
+    datos.append("id_auto",id_auto);
     
-    var respuesta=await fetch(urlServer+"php/contacto/cargarContacto.php",{
+    var respuesta=await fetch(urlServer+"php/auto/cargarAuto.php",{
         method:'POST',
         body:datos
     });
     
     var resultado=await respuesta.json();
 
-    document.querySelector("#contactoid").value=resultado.contactoid;
-    document.querySelector("#enombre").value=resultado.nombre;
-    document.querySelector("#eap").value=resultado.ap;
-    document.querySelector("#eam").value=resultado.am;
-    document.querySelector("#etelefono").value=resultado.telefono;
-    document.querySelector("#ecorreo").value=resultado.correo;
+    document.querySelector("#id_auto").value=resultado.id_auto;
+    document.querySelector("#emarca").value=resultado.marca;
+    document.querySelector("#emodelo").value=resultado.modelo;
+    document.querySelector("#eaño").value=resultado.año;
+    document.querySelector("#ecolor").value=resultado.color;
+    document.querySelector("#ecosto").value=resultado.costo;
+
 
 }
 
-const editarContacto=async()=>{
-    var contactoid=document.querySelector("#contactoid").value;
-    var nombre=document.querySelector("#enombre").value;
-    var ap=document.querySelector("#eap").value;
-    var am=document.querySelector("#eam").value;
-    var telefono=document.querySelector("#etelefono").value;
-    var correo=document.querySelector("#ecorreo").value;
+const editarAuto=async()=>{
+    var auto=document.querySelector("#id_auto").value;
+    var marca=document.querySelector("#emarca").value;
+    var modelo=document.querySelector("#emodelo").value;
+    var año=document.querySelector("#eaño").value;
+    var color=document.querySelector("#ecolor").value;
+    var costo=document.querySelector("#ecosto").value;
 
-    if(nombre.trim()==='' ||
-    ap.trim()==='' ||
-    am.trim()==='' ||
-    telefono.trim()==='' ||
-    correo.trim()==='' ){
+    if(marca.trim()==='' ||
+    modelo.trim()==='' ||
+    año.trim()==='' ||
+    color.trim()==='' ||
+    costo.trim()==='' ){
         Swal.fire({
             icon: 'error',
             title: 'ERROR',
@@ -184,15 +185,15 @@ const editarContacto=async()=>{
 
      // MODIFICAR EN LA BASE DE DATOS
      const datos=new FormData();
-     datos.append("contactoid",contactoid);
-     datos.append("nombre",nombre);
-     datos.append("ap",ap);
-     datos.append("am",am);
-     datos.append("telefono",telefono);
-     datos.append("correo",correo);
+     datos.append("id_auto",auto);
+     datos.append("marca",marca);
+     datos.append("modelo",modelo);
+     datos.append("año",año);
+     datos.append("color",color);
+     datos.append("costo",costo);
      
  
-     var respuesta=await fetch(urlServer+"php/contacto/editarContacto.php",{
+     var respuesta=await fetch(urlServer+"php/auto/editarAuto.php",{
          method:'POST',
          body:datos
      });
@@ -204,7 +205,7 @@ const editarContacto=async()=>{
              icon: 'success',
              title: 'EXITO!',
              text: resultado.mensaje,
-             footer: 'CRUD CONTACTOS'
+             footer: 'CRUD AUTO'
            }) 
            document.querySelector("#formEditar").reset();
           
@@ -213,9 +214,9 @@ const editarContacto=async()=>{
              icon: 'error',
              title: 'ERROR',
              text: resultado.mensaje,
-             footer: 'CRUD CONTACTOS'
+             footer: 'CRUD AUTO'
            }) 
      }     
-     cargarContactos();
+     cargarAutos();
 
 }

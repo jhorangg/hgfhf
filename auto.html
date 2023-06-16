@@ -4,18 +4,18 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRUD CONTACTOS</title>
+    <title>CRUD AUTO</title>
     <link rel="shortcut icon" href="assets/img/cecytem.png" type="image/x-icon">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="assets/css/bootstrap-icons.css">
 </head>
-<body onload="cargarContactos();checarSesion();">
+<body onload="cargarAutos();checarSesion();">
     <nav class="navbar navbar-dark bg-dark">
         <div class="container-fluid">
           <a class="navbar-brand" href="#">
             <img src="assets/img/cecytem.png" alt="" width="30" height="24" class="d-inline-block align-text-top">
-            CRUD CONTACTOS
+            CRUD AUTO
           </a>
           
 
@@ -39,29 +39,34 @@
           <li class="nav-item">
             <a class="nav-link" href="cliente.html">Clientes</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="auto.html">Autos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="alumno.html">Alumnos</a>
+          </li>
         </ul>
       </div>
-
     
 
       <div class="card text-center m-4">
         <div class="card-header">
-            CRUD CONTACTOS
+            CRUD AUTO
         </div>
         <div class="card-body">
             <div class="text-end">
-            <button class="btn btn-danger mb-3" data-bs-toggle="modal" data-bs-target="#agregarModal"> <i class="bi bi-person-plus p-1"></i>Agregar Contacto</button>
+            <button class="btn btn-danger mb-3" data-bs-toggle="modal" data-bs-target="#agregarModal"> <i class="bi bi-person-plus p-1"></i>Agregar auto</button>
 
 
             </div>
             <table class="table table-hover">
                 <thead class="table-dark">
                   <tr>
-                    <td>Nombre</td>
-                    <td>Apellido Paterno</td>
-                    <td>Apellido Materno</td>
-                    <td>Telefono</td>
-                    <td>Correo</td>
+                    <td>Marca</td>
+                    <td>Modelo</td>
+                    <td>Año</td>
+                    <td>Color</td>
+                    <td>Costo</td>
                     <td>Editar</td>
                     <td>Eliminar</td>
                   </tr>
@@ -86,35 +91,43 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">AGREGAR CONTACTO</h5>
+        <h5 class="modal-title" id="exampleModalLabel">AGREGAR AUTO</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form id="formAgregar">
           <div class="mb-3">
-            <label for="nombre" class="form-label">Nombre</label>
-            <input type="text" class="form-control" id="nombre" placeholder="Nombre">
+            <label for="marca" class="form-label">Marca</label>
+            <input type="text" class="form-control" id="marca" placeholder="Marca">
           </div>
           <div class="mb-3">
-            <label for="ap" class="form-label">Apellido Paterno</label>
-            <input type="text" class="form-control" id="ap" placeholder="Apellido Paterno">
+            <label for="modelo" class="form-label">Modelo</label>
+            <input type="text" class="form-control" id="modelo" placeholder="Modelo">
           </div>
           <div class="mb-3">
-            <label for="am" class="form-label">Apellido Materno</label>
-            <input type="text" class="form-control" id="am" placeholder="Apellido Materno">
+            <label for="Año" class="form-label">Año</label>
+            <select name="" id="año" class="form-control">
+              <option value="2000">2000</option>
+              <option value="2040">2040</option>
+              <option value="2006">2006</option>
+            </select>
           </div>
           <div class="mb-3">
-            <label for="tel" class="form-label">Teléfono</label>
-            <input type="tel" class="form-control" id="telefono" placeholder="Teléfono">
+            <label for="color" class="form-label">Color</label>
+            <select name="" id="color" class="form-control">
+              <option value="negro">negro</option>
+              <option value="rojo">rojo</option>
+              <option value="blanco">blanco</option>
+            </select>
           </div>
           <div class="mb-3">
-            <label for="correo" class="form-label">Correo Electrónico</label>
-            <input type="email" class="form-control" id="correo" placeholder="example@dominio.com">
+            <label for="costo" class="form-label">Costo</label>
+            <input type="text" class="form-control" id="costo" placeholder="Costo">
           </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="bi bi-x-circle p-1"></i>Cancelar</button>
-        <button type="button" class="btn btn-success" onclick="agregarContacto()"><i class="bi bi-box-arrow-down p-1"></i>Guardar</button>
+        <button type="button" class="btn btn-success" onclick="agregarAuto()"><i class="bi bi-box-arrow-down p-1"></i>Guardar</button>
       </div>
     </form>
     </div>
@@ -128,44 +141,52 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">EDITAR CONTACTO</h5>
+        <h5 class="modal-title" id="exampleModalLabel">EDITAR AUTO</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form id="formEditar">
           <div class="mb-3">
-            <label for="nombre" class="form-label">Nombre</label>
-            <input type="text" class="form-control" id="enombre" placeholder="Nombre">
+            <label for="marca" class="form-label">Marca</label>
+            <input type="text" class="form-control" id="emarca" placeholder="Marca">
           </div>
           <div class="mb-3">
-            <label for="ap" class="form-label">Apellido Paterno</label>
-            <input type="text" class="form-control" id="eap" placeholder="Apellido Paterno">
+            <label for="modelo" class="form-label">Modelo</label>
+            <input type="text" class="form-control" id="emodelo" placeholder="Modelo">
           </div>
           <div class="mb-3">
-            <label for="am" class="form-label">Apellido Materno</label>
-            <input type="text" class="form-control" id="eam" placeholder="Apellido Materno">
+            <label for="año" class="form-label">Año</label>
+            <select name="" id="eaño" class="form-control">
+              <option value="2000">2000</option>
+              <option value="2040">2040</option>
+              <option value="2006">2006</option>
+            </select>
           </div>
           <div class="mb-3">
-            <label for="tel" class="form-label">Teléfono</label>
-            <input type="tel" class="form-control" id="etelefono" placeholder="Teléfono">
+            <label for="color" class="form-label">Color</label>
+            <select name="" id="ecolor" class="form-control">
+              <option value="negro">negro</option>
+              <option value="rojo">rojo</option>
+              <option value="blanco">blanco</option>
+            </select>
           </div>
           <div class="mb-3">
-            <label for="correo" class="form-label">Correo Electrónico</label>
-            <input type="email" class="form-control" id="ecorreo" placeholder="example@dominio.com">
+            <label for="costo" class="form-label">Costo</label>
+            <input type="costo" class="form-control" id="ecosto" placeholder="Costo">
           </div>
       </div>
       <div class="modal-footer">
-        <input type="hidden" id="contactoid">
+        <input type="hidden" id="id_auto">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="bi bi-x-circle p-1"></i>Cancelar</button>
-        <button type="button" class="btn btn-success" onclick="editarContacto()"><i class="bi bi-box-arrow-down p-1"></i>Guardar</button>
+        <button type="button" class="btn btn-success" onclick="editarAuto()"><i class="bi bi-box-arrow-down p-1"></i>Guardar</button>
       </div>
     </form>
     </div>
   </div>
 </div>
     
-      <script src="assets/js/appCRUD.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.18/dist/sweetalert2.all.min.js"></script>
+      <script src="assets/js/appAUTO.JS"></script>
+      <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/sweetalert2.all.min.js"></script>
 </body>
 </html>

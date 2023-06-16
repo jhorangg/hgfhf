@@ -14,24 +14,24 @@ const cerrarSesion=()=>{
 }
 
 
-const agregarContacto= async()=>{
+const agregarAlumno= async()=>{
+    var numcontrol=document.querySelector("#numcontrol").value;
     var nombre=document.querySelector("#nombre").value;
-    var ap=document.querySelector("#ap").value;
-    var am=document.querySelector("#am").value;
-    var telefono=document.querySelector("#telefono").value;
-    var correo=document.querySelector("#correo").value;
+    var fecha=document.querySelector("#fecha").value;
+    var grupo=document.querySelector("#grupo").value;
+    var carrera=document.querySelector("#carrera").value;
     
 
-    if(nombre.trim()==='' ||
-    ap.trim()==='' ||
-    am.trim()==='' ||
-    telefono.trim()==='' ||
-    correo.trim()==='' ){
+    if(numcontrol.trim()==='' ||
+    nombre.trim()==='' ||
+    fecha.trim()==='' ||
+    grupo.trim()==='' ||
+    carrera.trim()===''){
         Swal.fire({
             icon: 'error',
             title: 'ERROR',
             text: 'FALTA LLENAR CAMPOS',
-            footer: 'CRUD CONTACTOS'
+            footer: 'CRUD ALUMNO'
           })  
         return;       
     }
@@ -39,14 +39,14 @@ const agregarContacto= async()=>{
 
     // INSERTAR A LA BASE DE DATOS
     const datos=new FormData();
+    datos.append("numcontrol",numcontrol);
     datos.append("nombre",nombre);
-    datos.append("ap",ap);
-    datos.append("am",am);
-    datos.append("telefono",telefono);
-    datos.append("correo",correo);
+    datos.append("fecha",fecha);
+    datos.append("grupo",grupo);
+    datos.append("carrera",carrera);
     
 
-    var respuesta=await fetch(urlServer+"php/contacto/agregarContacto.php",{
+    var respuesta=await fetch(urlServer+"php/alumno/agregarAlumno.php",{
         method:'POST',
         body:datos
     });
@@ -58,7 +58,7 @@ const agregarContacto= async()=>{
             icon: 'success',
             title: 'EXITO!',
             text: resultado.mensaje,
-            footer: 'CRUD CONTACTOS'
+            footer: 'CRUD ALUMNO'
           }) 
           document.querySelector("#formAgregar").reset();
          
@@ -67,16 +67,16 @@ const agregarContacto= async()=>{
             icon: 'error',
             title: 'ERROR',
             text: resultado.mensaje,
-            footer: 'CRUD CONTACTOS'
+            footer: 'CRUD ALUMNO'
           }) 
     }
     document.querySelector("#agregarModal").click();
-    cargarContactos();
+    cargarAlumnos();
 }
 
-const cargarContactos=async()=>{
+const cargarAlumnos=async()=>{
 
-    var respuesta=await fetch(urlServer+"php/contacto/cargarContactos.php",{});
+    var respuesta=await fetch(urlServer+"php/alumno/cargarAlumnos.php",{});
     var registrosHTML=``;
     var resultado=await respuesta.json();
 
@@ -90,8 +90,8 @@ const cargarContactos=async()=>{
         <td>${fila[3]}</td>
         <td>${fila[4]}</td>
         <td>${fila[5]}</td>
-        <td><button class="btn btn-success "  data-bs-toggle="modal" data-bs-target="#editarModal" onclick="cargarContacto(${fila[0]})"><i class="bi bi-pencil-square p-1"></i>Editar</button></td>
-        <td><button class="btn btn-danger" onclick="eliminarContacto(${fila[0]})"> <i class="bi bi-trash p-1"></i>Eliminar</button></td>
+        <td><button class="btn btn-success "  data-bs-toggle="modal" data-bs-target="#editarModal" onclick="cargarAlumno(${fila[0]})"><i class="bi bi-pencil-square p-1"></i>Editar</button></td>
+        <td><button class="btn btn-danger" onclick="eliminarAlumno(${fila[0]})"> <i class="bi bi-trash p-1"></i>Eliminar</button></td>
       </tr>
         `;
     });
@@ -99,9 +99,9 @@ const cargarContactos=async()=>{
 
 }
 
-const eliminarContacto=(contactoid)=>{
+const eliminarAlumno=(alumnoid)=>{
     Swal.fire({
-        title: '¿Estás seguro de eliminar este Contacto?',
+        title: '¿Estás seguro de eliminar este Cliente?',
         showDenyButton: true,
         confirmButtonText: 'SI',
         confirmButtonColor: '#198754',
@@ -110,9 +110,9 @@ const eliminarContacto=(contactoid)=>{
         if (result.isConfirmed) {
 
             const datos=new FormData();
-                datos.append("contactoid",contactoid);
+                datos.append("id_alumno",alumnoid);
 
-            var respuesta=await fetch(urlServer+"php/contacto/eliminarContacto.php",{
+            var respuesta=await fetch(urlServer+"php/alumno/eliminarAlumno.php",{
                 method:'POST',
                 body:datos
             });
@@ -124,7 +124,7 @@ const eliminarContacto=(contactoid)=>{
                     icon: 'success',
                     title: 'EXITO!',
                     text: resultado.mensaje,
-                    footer: 'CRUD CONTACTOS'
+                    footer: 'CRUD ALUMNO'
                   }) 
                  
             }else{
@@ -132,47 +132,48 @@ const eliminarContacto=(contactoid)=>{
                     icon: 'error',
                     title: 'ERROR',
                     text: resultado.mensaje,
-                    footer: 'CRUD CONTACTOS'
+                    footer: 'CRUD ALUMNO'
                   }) 
             }
-            cargarContactos();         
+            cargarAlumnos();         
         } 
       })
 }
 
-const cargarContacto=async(contactoid)=>{
+const cargarAlumno=async(id_alumno)=>{
     const datos=new FormData();
-    datos.append("contactoid",contactoid);
+    datos.append("id_alumno",id_alumno);
     
-    var respuesta=await fetch(urlServer+"php/contacto/cargarContacto.php",{
+    var respuesta=await fetch(urlServer+"php/alumno/cargarAlumno.php",{
         method:'POST',
         body:datos
     });
     
     var resultado=await respuesta.json();
 
-    document.querySelector("#contactoid").value=resultado.contactoid;
+    document.querySelector("#id_alumno").value=resultado.id_alumno;
+    document.querySelector("#enumcontrol").value=resultado.numcontrol;
     document.querySelector("#enombre").value=resultado.nombre;
-    document.querySelector("#eap").value=resultado.ap;
-    document.querySelector("#eam").value=resultado.am;
-    document.querySelector("#etelefono").value=resultado.telefono;
-    document.querySelector("#ecorreo").value=resultado.correo;
+    document.querySelector("#efecha").value=resultado.fecha;
+    document.querySelector("#egrupo").value=resultado.grupo;
+    document.querySelector("#ecarrera").value=resultado.carrera;
+
 
 }
 
-const editarContacto=async()=>{
-    var contactoid=document.querySelector("#contactoid").value;
+const editarAlumno=async()=>{
+    var alumno=document.querySelector("#id_alumno").value;
+    var numcontrol=document.querySelector("#enumcontrol").value;
     var nombre=document.querySelector("#enombre").value;
-    var ap=document.querySelector("#eap").value;
-    var am=document.querySelector("#eam").value;
-    var telefono=document.querySelector("#etelefono").value;
-    var correo=document.querySelector("#ecorreo").value;
+    var fecha=document.querySelector("#efecha").value;
+    var grupo=document.querySelector("#egrupo").value;
+    var carrera=document.querySelector("#ecarrera").value;
 
-    if(nombre.trim()==='' ||
-    ap.trim()==='' ||
-    am.trim()==='' ||
-    telefono.trim()==='' ||
-    correo.trim()==='' ){
+    if(numcontrol.trim()==='' ||
+    nombre.trim()==='' ||
+    fecha.trim()==='' ||
+    grupo.trim()==='' ||
+    carrera.trim()==='' ){
         Swal.fire({
             icon: 'error',
             title: 'ERROR',
@@ -184,15 +185,15 @@ const editarContacto=async()=>{
 
      // MODIFICAR EN LA BASE DE DATOS
      const datos=new FormData();
-     datos.append("contactoid",contactoid);
+     datos.append("id_alumno",alumno);
+     datos.append("numcontrol",numcontrol);
      datos.append("nombre",nombre);
-     datos.append("ap",ap);
-     datos.append("am",am);
-     datos.append("telefono",telefono);
-     datos.append("correo",correo);
+     datos.append("fecha",fecha);
+     datos.append("grupo",grupo);
+     datos.append("carrera",carrera);
      
  
-     var respuesta=await fetch(urlServer+"php/contacto/editarContacto.php",{
+     var respuesta=await fetch(urlServer+"php/alumno/editarAlumno.php",{
          method:'POST',
          body:datos
      });
@@ -204,7 +205,7 @@ const editarContacto=async()=>{
              icon: 'success',
              title: 'EXITO!',
              text: resultado.mensaje,
-             footer: 'CRUD CONTACTOS'
+             footer: 'CRUD ALUMNO'
            }) 
            document.querySelector("#formEditar").reset();
           
@@ -213,9 +214,9 @@ const editarContacto=async()=>{
              icon: 'error',
              title: 'ERROR',
              text: resultado.mensaje,
-             footer: 'CRUD CONTACTOS'
+             footer: 'CRUD ALUMNO'
            }) 
      }     
-     cargarContactos();
+     cargarAlumnos();
 
 }
